@@ -10,5 +10,11 @@ import 'package:meta_mart/features/auth/domain/repositories/auth_repository_impl
 import 'package:meta_mart/features/auth/domain/usecases/login_usecase.dart';
 import 'package:meta_mart/features/auth/domain/usecases/register_usecase.dart';
 import 'package:meta_mart/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:meta_mart/features/home/data/datasources/product_remote_data_source.dart';
+import 'package:meta_mart/features/home/data/datasources/product_remote_data_source_impl.dart';
+import 'package:meta_mart/features/home/domain/repositories/product_repository.dart';
+import 'package:meta_mart/features/home/domain/repositories/product_repository_impl.dart';
+import 'package:meta_mart/features/home/domain/usecases/get_products_usecase.dart';
+import 'package:meta_mart/features/home/presentation/bloc/home_bloc.dart';
 
 part 'init_dependencies.main.dart';

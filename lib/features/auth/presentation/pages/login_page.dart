@@ -6,7 +6,6 @@ import 'package:meta_mart/core/utils/show_snackbar.dart';
 import 'package:meta_mart/core/widgets/app_bottom_nav_bar.dart';
 import 'package:meta_mart/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:meta_mart/features/auth/presentation/pages/singup_page.dart';
-import 'package:meta_mart/features/home/presentation/pages/home_page.dart';
 import 'package:meta_mart/features/auth/presentation/widgets/auth_page_shell.dart';
 import 'package:meta_mart/features/auth/presentation/widgets/auth_primary_button.dart';
 import 'package:meta_mart/features/auth/presentation/widgets/auth_social_button.dart';

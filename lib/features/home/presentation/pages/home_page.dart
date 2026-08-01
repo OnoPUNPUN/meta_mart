@@ -1,17 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:meta_mart/features/home/presentation/bloc/home_bloc.dart';
+import 'package:meta_mart/features/home/presentation/widgets/product_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const name = "/home-page";
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(GetProductsEvent());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: .start,
-          children: [Text("Hello PUNPUN")],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: .start,
+            crossAxisAlignment: .start,
+            children: [
+              Text("Hello PUNPUN", style: textTheme.headlineMedium),
+              Gap(16),
+              Expanded(
+                child: BlocBuilder<HomeBloc, HomeState>(
+                  builder: (context, state) {
+                    if (state is HomeLoading || state is HomeInitial) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (state is HomeFailure) {
+                      return Center(child: Text(state.message));
+                    }
+
+                    if (state is HomeLoaded) {
+                      return GridView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: state.products.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 160 / 245,
+                            ),
+                        itemBuilder: (context, index) {
+                          final product = state.products[index];
+
+                          return ProductCard(
+                            imagePath: product.imageUrl,
+                            price: product.price,
+                            title: product.title,
+                            subtitle: product.categoryName,
+                          );
+                        },
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

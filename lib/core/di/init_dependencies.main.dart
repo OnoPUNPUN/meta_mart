@@ -34,4 +34,19 @@ Future<void> init() async {
       registerUsecase: serviceProvider(),
     ),
   );
+
+  // Get All Products
+  serviceProvider.registerLazySingleton<ProductRemoteDataSource>(
+    () => ProductRemoteDataSourceImpl(serviceProvider()),
+  );
+
+  serviceProvider.registerLazySingleton<ProductRepository>(
+    () => ProductRepositoryImpl(serviceProvider()),
+  );
+
+  serviceProvider.registerLazySingleton(
+    () => GetProductsUsecase(serviceProvider()),
+  );
+
+  serviceProvider.registerFactory(() => HomeBloc(serviceProvider()));
 }
