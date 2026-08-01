@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
+import 'package:meta_mart/core/widgets/app_bottom_nav_bar.dart';
 import 'package:meta_mart/features/auth/presentation/pages/login_page.dart';
 import 'package:meta_mart/features/auth/presentation/pages/singup_page.dart';
-import 'package:meta_mart/features/home/presentation/pages/home_page.dart';
 
 class AppRouter {
   const AppRouter._();
@@ -18,8 +18,8 @@ class AppRouter {
         builder: (context, state) => const SingupPage(),
       ),
       GoRoute(
-        path: HomePage.name,
-        builder: (context, state) => const HomePage(),
+        path: AppBottomNavBar.name,
+        builder: (context, state) => const AppBottomNavBar(),
       ),
     ],
   );

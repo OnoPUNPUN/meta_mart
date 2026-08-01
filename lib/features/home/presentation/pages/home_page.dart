@@ -6,6 +6,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("Home Screen")));
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: .start,
+          children: [Text("Hello PUNPUN")],
+        ),
+      ),
+    );
   }
 }
