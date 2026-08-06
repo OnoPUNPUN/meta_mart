@@ -9,22 +9,73 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetProductsUsecase getProductsUsecase;
+  static const int _limit = 10;
 
   HomeBloc(this.getProductsUsecase) : super(HomeInitial()) {
-    on<GetProductsEvent>(_onGetProductsEvent);
+    on<ProductsFetched>(_onProductsFetchedEvent);
+    on<ProductsRefreshed>(_onProductsRefreshed);
   }
 
-  Future<void> _onGetProductsEvent(
-    GetProductsEvent event,
+  Future<void> _onProductsFetchedEvent(
+    ProductsFetched event,
     Emitter<HomeState> emit,
   ) async {
-    emit(HomeLoading());
+    final currentState = state;
 
-    final result = await getProductsUsecase(NoParams());
+    if (currentState is HomeLoading || currentState is HomeLoadingMore) {
+      return;
+    }
+
+    if (currentState is HomeLoaded && currentState.hasReachedEnd) {
+      return;
+    }
+
+    final List<Product> oldProducts;
+    final int currentOffset;
+
+    if (currentState is HomeLoaded) {
+      oldProducts = currentState.products;
+      currentOffset = currentState.offset;
+
+      emit(HomeLoadingMore(products: oldProducts, offset: currentOffset));
+    } else {
+      oldProducts = [];
+      currentOffset = 0;
+
+      emit(HomeLoading());
+    }
+
+    final result = await getProductsUsecase(
+      GetProductParams(offset: currentOffset, limit: _limit),
+    );
 
     result.fold(
-      (failure) => emit(HomeFailure(failure.message)),
-      (products) => emit(HomeLoaded(products)),
+      (failure) {
+        if (oldProducts.isNotEmpty) {
+          emit(HomeLoaded(oldProducts, currentOffset, false));
+        } else {
+          emit(HomeFailure(failure.message));
+        }
+      },
+      (newProducts) {
+        final allProducts = [...oldProducts, ...newProducts];
+
+        emit(
+          HomeLoaded(
+            allProducts,
+            currentOffset + newProducts.length,
+            newProducts.length < _limit,
+          ),
+        );
+      },
     );
+  }
+
+  Future<void> _onProductsRefreshed(
+    ProductsRefreshed event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(HomeInitial());
+    add(const ProductsFetched());
   }
 }

@@ -49,3 +49,6 @@ flutter:
     - assets/images/
 
 # dart run build_runner build --delete-conflicting-outputs
+
+# john@mail.com
+# changeme

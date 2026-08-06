@@ -12,9 +12,15 @@ class ProductRepositoryImpl implements ProductRepository {
   ProductRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<Product>>> getProducts() async {
+  Future<Either<Failure, List<Product>>> getProducts({
+    required int offset,
+    required int limit,
+  }) async {
     try {
-      final products = await remoteDataSource.getProducts();
+      final products = await remoteDataSource.getProducts(
+        offset: offset,
+        limit: limit,
+      );
 
       return right(products);
     } on ServerException catch (e) {

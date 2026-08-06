@@ -9,8 +9,14 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   ProductRemoteDataSourceImpl(this.apiClient);
 
   @override
-  Future<List<ProductModel>> getProducts() async {
-    final response = await apiClient.get('/products');
+  Future<List<ProductModel>> getProducts({
+    required int offset,
+    required int limit,
+  }) async {
+    final response = await apiClient.get(
+      '/products',
+      queryParameters: {'offset': offset, 'limit': limit},
+    );
 
     if (response.statusCode == 200) {
       final data = response.data as List<dynamic>;

@@ -13,12 +13,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeBloc>().add(GetProductsEvent());
+      context.read<HomeBloc>().add(ProductsFetched());
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients || !mounted) return;
+
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final state = context.read<HomeBloc>().state;
+
+    if (currentScroll >= maxScroll * 0.8 &&
+        state is HomeLoaded &&
+        !state.hasReachedEnd) {
+      context.read<HomeBloc>().add(const ProductsFetched());
+    }
   }
 
   @override
@@ -44,10 +68,16 @@ class _HomePageState extends State<HomePage> {
                       return Center(child: Text(state.message));
                     }
 
-                    if (state is HomeLoaded) {
+                    if (state is HomeLoaded || state is HomeLoadingMore) {
+                      final products = state is HomeLoaded
+                          ? state.products
+                          : (state as HomeLoadingMore).products;
+
+                      final isLoadingMore = state is HomeLoadingMore;
                       return GridView.builder(
+                        controller: _scrollController,
                         padding: EdgeInsets.zero,
-                        itemCount: state.products.length,
+                        itemCount: products.length + (isLoadingMore ? 1 : 0),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
@@ -56,7 +86,12 @@ class _HomePageState extends State<HomePage> {
                               childAspectRatio: 160 / 245,
                             ),
                         itemBuilder: (context, index) {
-                          final product = state.products[index];
+                          if (index >= products.length) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          final product = products[index];
 
                           return ProductCard(
                             imagePath: product.imageUrl,
