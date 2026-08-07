@@ -58,6 +58,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text("Hello PUNPUN", style: textTheme.headlineMedium),
               Gap(16),
+              Text("All of our Products", style: textTheme.bodyMedium),
+              Gap(16),
               Expanded(
                 child: BlocBuilder<HomeBloc, HomeState>(
                   builder: (context, state) {

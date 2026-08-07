@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta_mart/core/theme/app_colors.dart';
 import 'package:meta_mart/features/home/presentation/pages/home_page.dart';
+import 'package:meta_mart/features/search/presentation/pages/search_products_page.dart';
 
 class AppBottomNavBar extends StatefulWidget {
   static const name = "/bottom-nav";
@@ -15,7 +16,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
 
   final List<Widget> _screens = const [
     HomePage(),
-    Center(child: Text("Page - 2")),
+    SearchProductsPage(),
     Center(child: Text("Page - 3")),
     Center(child: Text("Page - 4")),
     Center(child: Text("Page - 5")),

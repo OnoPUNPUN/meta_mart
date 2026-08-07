@@ -49,4 +49,19 @@ Future<void> init() async {
   );
 
   serviceProvider.registerFactory(() => HomeBloc(serviceProvider()));
+
+  // Get all Categories
+  serviceProvider.registerLazySingleton<CategoryRemoteDataSource>(
+    () => CategoryRemoteDataSourceImpl(serviceProvider()),
+  );
+
+  serviceProvider.registerLazySingleton<CategoryRepository>(
+    () => CategoryRepositoryImpl(remoteDataSource: serviceProvider()),
+  );
+
+  serviceProvider.registerLazySingleton(
+    () => GetCategoriesUsecase(serviceProvider()),
+  );
+
+  serviceProvider.registerFactory(() => SearchBloc(serviceProvider()));
 }

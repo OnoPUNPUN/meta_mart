@@ -5,6 +5,7 @@ import 'package:meta_mart/core/router/app_router.dart';
 import 'package:meta_mart/core/theme/app_theme.dart';
 import 'package:meta_mart/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:meta_mart/features/home/presentation/bloc/home_bloc.dart';
+import 'package:meta_mart/features/search/presentation/bloc/search_bloc.dart';
 
 class MetaMart extends StatelessWidget {
   const MetaMart({super.key});
@@ -17,6 +18,7 @@ class MetaMart extends StatelessWidget {
           create: (context) => serviceProvider<AuthBloc>(),
         ),
         BlocProvider(create: (context) => serviceProvider<HomeBloc>()),
+        BlocProvider(create: (context) => serviceProvider<SearchBloc>()),
       ],
       child: MaterialApp.router(
         routerConfig: AppRouter.router,

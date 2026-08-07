@@ -16,5 +16,11 @@ import 'package:meta_mart/features/home/domain/repositories/product_repository.d
 import 'package:meta_mart/features/home/domain/repositories/product_repository_impl.dart';
 import 'package:meta_mart/features/home/domain/usecases/get_products_usecase.dart';
 import 'package:meta_mart/features/home/presentation/bloc/home_bloc.dart';
+import 'package:meta_mart/features/search/data/datasources/category_remote_data_source.dart';
+import 'package:meta_mart/features/search/data/datasources/category_remote_data_source_impl.dart';
+import 'package:meta_mart/features/search/data/repositories/category_repository.dart';
+import 'package:meta_mart/features/search/data/repositories/category_repository_impl.dart';
+import 'package:meta_mart/features/search/domain/usecases/get_categories_usecase.dart';
+import 'package:meta_mart/features/search/presentation/bloc/search_bloc.dart';
 
 part 'init_dependencies.main.dart';
