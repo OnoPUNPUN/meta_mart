@@ -28,4 +28,25 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
     throw ServerException(message: "Failed to fetch products");
   }
+
+  @override
+  Future<List<ProductModel>> filterProducts({
+    required int categoryId,
+    required String categorySlug,
+  }) async {
+    final response = await apiClient.get(
+      '/products',
+      queryParameters: {'categoryId': categoryId, 'categorySlug': categorySlug},
+    );
+
+    if (response.statusCode == 200) {
+      final data = response.data as List<dynamic>;
+
+      return data
+          .map((item) => ProductModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+
+    throw ServerException(message: 'Failed to feact Products');
+  }
 }

@@ -31,4 +31,24 @@ class ProductRepositoryImpl implements ProductRepository {
       return left(const ServerFailure('Something went wrong'));
     }
   }
+
+  @override
+  Future<Either<Failure, List<Product>>> filterProducts({
+    required int categoryId,
+    required String categorySlug,
+  }) async {
+    try {
+      final products = await remoteDataSource.filterProducts(
+        categoryId: categoryId,
+        categorySlug: categorySlug,
+      );
+      return right(products);
+    } on ServerException catch (e) {
+      return left(ServerFailure(e.message));
+    } on DioException catch (e) {
+      return left(ServerFailure(e.message ?? 'Network error'));
+    } catch (_) {
+      return left(const ServerFailure('Something went wrong'));
+    }
+  }
 }

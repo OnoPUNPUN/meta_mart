@@ -5,4 +5,9 @@ abstract interface class ProductRemoteDataSource {
     required int offset,
     required int limit,
   });
+
+  Future<List<ProductModel>> filterProducts({
+    required int categoryId,
+    required String categorySlug,
+  });
 }

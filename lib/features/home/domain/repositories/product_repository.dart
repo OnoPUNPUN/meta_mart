@@ -7,4 +7,9 @@ abstract interface class ProductRepository {
     required int offset,
     required int limit,
   });
+
+  Future<Either<Failure, List<Product>>> filterProducts({
+    required int categoryId,
+    required String categorySlug,
+  });
 }
